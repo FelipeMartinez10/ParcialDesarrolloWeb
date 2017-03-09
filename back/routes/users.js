@@ -101,6 +101,7 @@ router.get('/flickr/:query', function (req, res) {
 		  flickr.photos.search({
 		  	safe:1,
 		  	sort:"relevance",
+        per_page: 4,
 		  	text:req.params["query"]
 		  }, (err, data) => {
 		  	if (err) res.send(err);
