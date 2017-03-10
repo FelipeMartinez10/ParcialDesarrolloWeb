@@ -12,5 +12,13 @@ Codigo: 201328315
 5. El back debería estar escuchando en [http://localhost:3000](http://localhost:3000)
 6. Listo!
 
+##Tecnologías:
+Este proyecto utiliza
+* React JS
+* MongoDB
+* Bootstrap
+* Node JS
+
+
 ##Plus:
 Este proyecto utiliza una base de datos MongoDB desplegada en MLab. En este base de datos se guardan las consultas de los usuarios y se usan estos datos para llenar la tabla de más buscados.
