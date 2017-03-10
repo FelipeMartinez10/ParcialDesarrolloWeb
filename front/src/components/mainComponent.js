@@ -16,6 +16,7 @@ class MainComponent extends Component {
         buscados:{},
         buscadosLleno:false
       }
+      this.getBuscados = this.getBuscados.bind(this);
     }
 
   getFlickrPhotos(event)
@@ -51,11 +52,28 @@ class MainComponent extends Component {
           );
           axios.post(URL+"/users/insert/"+this.state.text).then(response =>
             {
-              console.log(response);
+              this.getBuscados();
             });
         }
       });
     }
+  }
+
+  getBuscados()
+  {
+    axios.get(URL+'/users/buscado').then(response =>
+      {
+        this.setState({
+          buscados:response.data,
+          buscadosLleno:false
+        });
+        if(typeof this.state.buscados.tercero !== "undefined")
+        {
+          this.setState(
+            {buscadosLleno:true}
+          );
+        }
+      });
   }
 
   render() {
