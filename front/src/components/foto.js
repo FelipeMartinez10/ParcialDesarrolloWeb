@@ -3,16 +3,9 @@ import '../App.css';
 
 class Foto extends Component {
 
-  constructor(props) {
-
-      super(props)
-
-    }
-
-
   render() {
     //console.log(this.props.foto);
-    const src = 'https://farm'+this.props.farm+'.staticflickr.com/'+this.props.server+'/'+this.props.id+'_'+this.props.secret+'.jpg';
+    const src = 'https://farm'+this.props.farm+'.staticflickr.com/'+this.props.server+'/'+this.props.id+'_'+this.props.secret+'_n.jpg';
     return (
       <div>
         <div className='row'>

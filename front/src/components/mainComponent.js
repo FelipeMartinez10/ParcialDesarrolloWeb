@@ -1,86 +1,79 @@
 import React, { Component } from 'react';
 import '../App.css';
 import axios from 'axios';
-import Foto from './foto';
+import Color from './color';
+import Tabla from './table';
 var URL = 'http://localhost:3000'
+const colores = ["blue", "yellow", "red", "orange", "green", "purple"];
 class MainComponent extends Component {
-
   constructor(props) {
 
       super(props)
       this.state = {
-        fotos:[],
-        lleno: false,
+        lleno:false,
+        fotos:[[],[],[],[],[],[]],
         text:''
       }
     }
 
   getFlickrPhotos(event)
   {
-    this.setState({text: event.target.value}, function() {
-      axios.get(URL+"/users/flickr/"+this.state.text).then(response => {
-      if(response.data.length>0)
-      {
-        this.setState({
-          lleno: true,
-          fotos: response.data,
-          estaLleno:true
-        });
-      }
+    if(event.key ==='Enter')
+    {
+      this.setState({text: event.target.value}, function() {
+        if(this.state.text ==='')
+        {
+          this.setState({
+            lleno:false,
+            fotos:[[],[],[],[],[],[]],
+            text:''
+          });
+        }
+        else
+        {
+          var i =0;
+          colores.forEach(co =>
+            axios.get(URL+"/users/flickr/"+this.state.text+' '+co).then(response => {
+              if(response.data.length>0)
+              {
+                const nuevo = this.state.fotos;
+                nuevo[i]=response.data;
+                i++;
+                this.setState({
+                  lleno: true,
+                  fotos:nuevo,
+                  estaLleno:true
+                });
+              }
+            })
+          );
+        }
       });
-    });
+    }
   }
 
-
-
-
   render() {
+    var i = 0;
     const estaLleno = this.state.lleno;
     return (
       <div>
-        <div className='row'>
-          <h1>Hola</h1>
+        <div className='row top'>
+          <div className='col-md-6'>
+            <div className='row'><h1>Flickr Rainbow</h1></div>
+            <div className='row'>
+              <input className='col-md-12' onKeyPress={this.getFlickrPhotos.bind(this)}></input>
+            </div>
+          </div>
+          <div className='col-md-6'><Tabla></Tabla></div>
         </div>
-        <div className='row'>
-          <input className='col-md-12' onChange={this.getFlickrPhotos.bind(this)}></input>
-        </div>
-        <div className='row'>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
-        <div className='col-md-2'>
-          {estaLleno ? (this.state.fotos.map(foto =>{
-                    return <Foto key={foto.id} id={foto.id} farm={foto.farm} server={foto.server} secret={foto.secret}/>
-                  }))
-              : (<h3>No hay fotos</h3>)}
-        </div>
+        <hr className="divisor"></hr>
+        <div>
+          <div className='row'>
+            {estaLleno ? (this.state.fotos.map(color =>{
+              i++;
+                return (<div key={i} className='col-md-2'><Color color={color}/></div>)}))
+                : (<h3>Escribe algo y presiona enter!</h3>)}
+          </div>
         </div>
       </div>
     );

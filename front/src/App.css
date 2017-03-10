@@ -1,4 +1,19 @@
 .img
 {
+  align-self: center;
+  height: 7em;
   width:100%;
+}
+.divisor
+{
+    margin: 2em 0;
+}
+.top
+{
+  margin-top: 2em;
+}
+.table-header
+{
+  background-color: black;
+  color:white;
 }

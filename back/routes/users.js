@@ -29,13 +29,13 @@ function getApiKeys(callback, errorcallback) {
 }
 
 
-var insertarMongo = function()
+var insertarMongo = function(valor)
 {
   MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
         console.log("Connected successfully to server");
 
-        insertDocuments(db, function() {
+        insertDocuments(db,valor, function() {
           db.close();
         });
       });
@@ -54,7 +54,7 @@ var leerMongo = function()
 
 var findDocuments = function(db, callback) {
   // Get the documents collection
-  var collection = db.collection('parcial');
+  var collection = db.collection('buscados');
   // Find some documents
   collection.find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -62,14 +62,14 @@ var findDocuments = function(db, callback) {
     console.log(docs)
     callback(docs);
   });
-}
+};
 
 
-var insertDocuments = function(db, callback) {
-  var collection = db.collection('parcial');
-  collection.insertMany([
-  /*AQUI JSON A INSERTAR*/
-], function(err, result) {
+var insertDocuments = function(db, valor, callback) {
+  var collection = db.collection('buscados');
+  collection.insert({valor}
+, function(err, result) {
+    console.log(result);
     callback(result);
   });
 };
@@ -81,7 +81,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/flickr/:query', function (req, res) {
-	console.log("Flickr call query=" + req.params['query'] );
+  console.log('Busqueda '+req.params['query']);
 	getApiKeys((api_key, api_secret) => {
 		const Flickr = require("flickrapi"),
 	    flickrOptions = {
@@ -115,5 +115,31 @@ router.get('/flickr/:query', function (req, res) {
 		res.send("Error!");
 	})
 });
+
+
+
+router.get('/buscado/:text', function(req, res, next) {
+  insertarMongo(req.params.text);
+  res.send('hola');
+});
+
+
+
+var masBuscado = function()
+{
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection("buscados");
+    col.aggregate([{
+        "$group": {_id: "$buscado", count: { "$sum": 1}}
+    }, {
+        "$sort": {count: -1}
+    }], function(err, docs) {
+        var keys = []
+        docs.forEach(function(doc) {
+            console.log(JSON.stringify(doc)); // do what you want here.
+        });
+    });
+  });
+};
 
 module.exports = router;
