@@ -99,6 +99,7 @@ class MainComponent extends Component {
                 : (<h3>Escribe algo y presiona enter!</h3>)}
           </div>
           <hr className="divisor"></hr>
+          <div className='row'><span>Proyecto realizado por <a href='https://webdevuniandes.github.io/f-martinez11/' target='_blank'>Felipe Martínez Piazuelo </a> </span></div>
         </div>
       </div>
     );
