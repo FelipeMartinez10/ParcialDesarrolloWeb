@@ -11,3 +11,6 @@ Codigo: 201328315
 4. El front debería ahora estar corriendo en [http://localhost:3036](http://localhost:3036)
 5. El back debería estar escuchando en [http://localhost:3000](http://localhost:3000)
 6. Listo!
+
+##Salsa Secreta:
+Este proyecto utiliza una base de datos MongoDB desplegada en MLab. En este base de datos se guardan las consultas de los usuarios y se usan estos datos para llenar la tabla de más buscados.
