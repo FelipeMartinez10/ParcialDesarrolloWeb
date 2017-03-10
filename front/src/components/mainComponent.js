@@ -3,7 +3,7 @@ import '../App.css';
 import axios from 'axios';
 import Color from './color';
 import Tabla from './table';
-var URL = 'http://localhost:3000'
+var URL = 'http://localhost:3000';
 const colores = ["blue", "yellow", "red", "orange", "green", "purple"];
 class MainComponent extends Component {
   constructor(props) {
@@ -49,10 +49,9 @@ class MainComponent extends Component {
               }
             })
           );
-
-          axios.get(URL+'/users/buscado/'+this.state.text).then(response =>
+          axios.post(URL+"/users/insert/"+this.state.text).then(response =>
             {
-              this.setState({buscados:response.data, buscadosLleno:true});
+              console.log(response);
             });
         }
       });
@@ -81,6 +80,7 @@ class MainComponent extends Component {
                 return (<div key={i} className='col-md-2'><Color color={color}/></div>)}))
                 : (<h3>Escribe algo y presiona enter!</h3>)}
           </div>
+          <hr className="divisor"></hr>
         </div>
       </div>
     );
