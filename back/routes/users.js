@@ -120,7 +120,26 @@ router.get('/flickr/:query', function (req, res) {
 
 router.get('/buscado/:text', function(req, res, next) {
   insertarMongo(req.params.text);
-  res.send('hola');
+  MongoClient.connect(url, function(err, db) {
+    var col = db.collection("buscados");
+    col.aggregate([{
+        "$group": {_id: "$valor", count: { "$sum": 1}}
+    }, {
+        "$sort": {count: -1}
+    },{"$limit": 3}], function(err, docs) {
+        var keys = []
+        //console.log(docs[0]);
+      //  console.log(docs[1]);
+      //  console.log(docs[2]);
+      //  console.log('chao');
+        var result = {
+          primero:docs[0],
+          segundo:docs[1],
+          tercero:docs[2]
+        }
+        res.send(result);
+    });
+  });
 });
 
 
@@ -130,14 +149,21 @@ var masBuscado = function()
   MongoClient.connect(url, function(err, db) {
     var col = db.collection("buscados");
     col.aggregate([{
-        "$group": {_id: "$buscado", count: { "$sum": 1}}
+        "$group": {_id: "$valor", count: { "$sum": 1}}
     }, {
         "$sort": {count: -1}
-    }], function(err, docs) {
+    },{"$limit": 3}], function(err, docs) {
         var keys = []
-        docs.forEach(function(doc) {
-            console.log(JSON.stringify(doc)); // do what you want here.
-        });
+        //console.log(docs[0]);
+      //  console.log(docs[1]);
+      //  console.log(docs[2]);
+      //  console.log('chao');
+        var result = [
+          {primero:docs[0]},
+          {segundo:docs[1]},
+          {tercero:docs[2]}
+        ]
+        return result;
     });
   });
 };

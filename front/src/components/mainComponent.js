@@ -12,7 +12,9 @@ class MainComponent extends Component {
       this.state = {
         lleno:false,
         fotos:[[],[],[],[],[],[]],
-        text:''
+        text:'',
+        buscados:{},
+        buscadosLleno:false
       }
     }
 
@@ -47,6 +49,11 @@ class MainComponent extends Component {
               }
             })
           );
+
+          axios.get(URL+'/users/buscado/'+this.state.text).then(response =>
+            {
+              this.setState({buscados:response.data, buscadosLleno:true});
+            });
         }
       });
     }
@@ -64,7 +71,7 @@ class MainComponent extends Component {
               <input className='col-md-12' onKeyPress={this.getFlickrPhotos.bind(this)}></input>
             </div>
           </div>
-          <div className='col-md-6'><Tabla></Tabla></div>
+          <div className='col-md-6'><Tabla buscados={this.state.buscados} lleno={this.state.buscadosLleno}></Tabla></div>
         </div>
         <hr className="divisor"></hr>
         <div>
